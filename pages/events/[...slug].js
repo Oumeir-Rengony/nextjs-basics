@@ -4,6 +4,8 @@ import { getFilteredEvents } from "../../data/dummy-data";
 import EventList from "../../components/event/event-list";
 import DefaultErrorPage from "next/error";
 import ResultsTitle from "../../components/event/results-title";
+import Button from "../../components/button/button";
+import ErrorAlert from "../../components/error-alert/error-alert";
 
 const FilteredEventsPage = () => {
   const router = useRouter();
@@ -23,7 +25,16 @@ const FilteredEventsPage = () => {
     numMonth < 1 ||
     numMonth > 12
   ) {
-    return <DefaultErrorPage statusCode={404} />;
+    return (
+        <>
+            <ErrorAlert>
+                <p>Invalid filter. Please adjust your values</p>
+            </ErrorAlert>
+            <div className="center">
+                <Button link="/events">Show All Events</Button>
+            </div>
+        </>
+    );
   }
 
   const filteredEvents = getFilteredEvents({
@@ -31,8 +42,18 @@ const FilteredEventsPage = () => {
     month: numMonth,
   });
 
+
   if(!filteredEvents || filteredEvents.length === 0){
-    return <p>No events found</p>;
+    return (
+        <>
+            <ErrorAlert>
+                <p>No events found</p>
+            </ErrorAlert>
+            <div className="center">
+                <Button link="/events">Show All Events</Button>
+            </div>
+        </>
+    );
   }
   
   const date = new Date(numYear, numMonth - 1);
