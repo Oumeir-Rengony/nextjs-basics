@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { getFilteredEvents } from "../../data/dummy-data";
 import EventList from "../../components/event/event-list";
-import DefaultErrorPage from "next/error";
 import ResultsTitle from "../../components/event/results-title";
 import Button from "../../components/button/button";
 import ErrorAlert from "../../components/error-alert/error-alert";
 
-const FilteredEventsPage = () => {
-  const router = useRouter();
+export const getServerSideProps = async ({params}) => {
+  const slug = params.slug;
+  return {
+     props: { slug }
+  }
+}
 
-  const filteredData = router.query.slug;
+const FilteredEventsPage = ({ slug }) => {
 
-  const [year, month] = filteredData;
+  const [year, month] = slug;
 
   const numYear = +year;
   const numMonth = +month;
@@ -26,14 +29,14 @@ const FilteredEventsPage = () => {
     numMonth > 12
   ) {
     return (
-        <>
-            <ErrorAlert>
-                <p>Invalid filter. Please adjust your values</p>
-            </ErrorAlert>
-            <div className="center">
-                <Button link="/events">Show All Events</Button>
-            </div>
-        </>
+      <>
+        <ErrorAlert>
+          <p>Invalid filter. Please adjust your values</p>
+        </ErrorAlert>
+        <div className="center">
+          <Button link="/events">Show All Events</Button>
+        </div>
+      </>
     );
   }
 
@@ -42,23 +45,22 @@ const FilteredEventsPage = () => {
     month: numMonth,
   });
 
-
-  if(!filteredEvents || filteredEvents.length === 0){
+  if (!filteredEvents || filteredEvents.length === 0) {
     return (
-        <>
-            <ErrorAlert>
-                <p>No events found</p>
-            </ErrorAlert>
-            <div className="center">
-                <Button link="/events">Show All Events</Button>
-            </div>
-        </>
+      <>
+        <ErrorAlert>
+          <p>No events found</p>
+        </ErrorAlert>
+        <div className="center">
+          <Button link="/events">Show All Events</Button>
+        </div>
+      </>
     );
   }
-  
+
   const date = new Date(numYear, numMonth - 1);
-  
-  return filteredData ? (
+
+  return slug ? (
     <>
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />

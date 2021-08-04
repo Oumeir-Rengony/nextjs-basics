@@ -5,10 +5,17 @@ import EventSummary from "../../components/event-detail/event-summary";
 import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
 
-const EventDetailPage = () => {
-  const router = useRouter();
 
-  const eventId = router.query.eventId;
+export const getServerSideProps = async ({params}) => {
+  const eventId = params.eventId;
+  return {
+     props: { eventId }
+  }
+}
+
+
+const EventDetailPage = ({eventId}) => {
+
   const event = getEventById(eventId);
 
   if (!event) {
