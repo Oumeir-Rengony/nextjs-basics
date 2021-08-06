@@ -1,9 +1,9 @@
 import React from "react";
+import Image from "next/image";
 import Button from "../button/button";
 import DateIcon from "../icons/date-icon";
 import ArrowRightIcon from "../icons/arrow-right-icon";
 import AddressIcon from "../icons/address-icon";
-
 
 import classes from "./styles/event-item.module.css"
 
@@ -24,6 +24,7 @@ const EventItem = ({ item }) => {
     return(
         <li className={classes.item}>
             <div className={classes.img__container}>
+                <Image src={'/'+image} alt={title} width={250} height={160} />
               <img src={`/${image}`} alt="event image" />  
             </div>
             <div className={classes.content}>
