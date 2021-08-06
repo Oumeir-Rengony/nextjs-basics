@@ -5,37 +5,41 @@ import ResultsTitle from "../../components/event/results-title";
 import Button from "../../components/button/button";
 import ErrorAlert from "../../components/error-alert/error-alert";
 
-const FilteredEventsPage = ({hasError, events, date}) => {
+const FilteredEventsPage = ({ hasError, events, date }) => {
+  const { year, month } = date;
+  const formattedDate = new Date(year, month - 1);
 
   if (hasError) {
     return (
-        <>
-            <ErrorAlert>
-                <p>Invalid filter. Please adjust your values</p>
-            </ErrorAlert>
-            <div className="center">
-                <Button link="/events">Show All Events</Button>
-            </div>
-        </>
+      <>
+        <ErrorAlert>
+          <p>Invalid filter. Please adjust your values</p>
+        </ErrorAlert>
+        <div className="center">
+          <Button link="/events">Show All Events</Button>
+        </div>
+      </>
     );
   }
 
-  if(!events || events.length === 0){
+  if (!events || events.length === 0) {
     return (
-        <>
-            <ErrorAlert>
-                <p>No events found</p>
-            </ErrorAlert>
-            <div className="center">
-                <Button link="/events">Show All Events</Button>
-            </div>
-        </>
+      <>
+        <Head>
+          <title>Filtered Events</title>
+          <meta name="description" content={`All events for ${month}/${year}`} />
+        </Head>
+        <ErrorAlert>
+          <p>No events found</p>
+        </ErrorAlert>
+        <div className="center">
+          <Button link="/events">Show All Events</Button>
+        </div>
+      </>
     );
   }
-  
-  const {year, month} = date;
-  const formattedDate = new Date(year, month - 1);
-  
+
+
   return (
     <>
       <ResultsTitle date={formattedDate} />
@@ -45,7 +49,6 @@ const FilteredEventsPage = ({hasError, events, date}) => {
 };
 
 export const getServerSideProps = async ({ params }) => {
-
   const filteredData = params.slug;
   const [year, month] = filteredData;
 
@@ -63,7 +66,7 @@ export const getServerSideProps = async ({ params }) => {
     return {
       props: {
         hasError: true,
-      }
+      },
     };
   }
 
@@ -78,9 +81,9 @@ export const getServerSideProps = async ({ params }) => {
       date: {
         year: numYear,
         month: numMonth,
-      }
-    }
+      },
+    },
   };
-}
+};
 
 export default FilteredEventsPage;

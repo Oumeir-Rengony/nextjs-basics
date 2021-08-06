@@ -1,11 +1,12 @@
 import React from "react";
+import Head from "next/head";
+
 import { getEventById, getFeaturedEvents } from "../../helpers/api-util";
 import EventSummary from "../../components/event-detail/event-summary";
 import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
 
 const EventDetailPage = ({ event }) => {
-
   if (!event) {
     return (
       <div className="center">
@@ -16,6 +17,10 @@ const EventDetailPage = ({ event }) => {
 
   return (
     <>
+      <Head>
+        <title>{event.title}</title>
+        <meta name="description" content={event.description} />
+      </Head>
       <EventSummary title={event.title} />
       <EventLogistics
         date={event.date}
@@ -35,17 +40,17 @@ export const getStaticProps = async ({ params }) => {
 
   const event = await getEventById(eventId);
 
-  if(!event){
+  if (!event) {
     return {
       notFound: true,
-    }
+    };
   }
 
   return {
     props: {
       event: event,
     },
-    revalidate: 400
+    revalidate: 400,
   };
 };
 
@@ -57,7 +62,7 @@ export const getStaticPaths = async () => {
   return {
     paths: paths,
     fallback: true,
-  }
+  };
 };
 
 export default EventDetailPage;
