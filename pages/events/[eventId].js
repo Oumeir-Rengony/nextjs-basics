@@ -32,7 +32,7 @@ const EventDetailPage = ({ event }) => {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
-      <Comments />
+      <Comments eventId={event.id}/>
     </>
   );
 };
