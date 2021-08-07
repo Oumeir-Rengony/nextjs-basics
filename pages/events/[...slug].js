@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import { getFilteredEvents } from "../../helpers/api-util";
 import EventList from "../../components/event/event-list";
 import ResultsTitle from "../../components/event/results-title";
