@@ -1,12 +1,19 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient } from "mongodb";
 
 export const connectDatabase = async () => {
-  const client = await MongoClient.connect(
-    "mongodb+srv://dbUser:dbPassword@nextjs-events.aezu0.mongodb.net/events?retryWrites=true&w=majority"
-  );
+  const username = process.env.mongodb_username;
+  const password = process.env.mongodb_password;
+  const cluster = process.env.mongodb_clustername;
+  const database = process.env.mongodb_database;
+
+  const connectionString = `mongodb+srv://${username}:${password}@${cluster}.aezu0.mongodb.net/${database}?retryWrites=true&w=majority`;
+  
+  console.log(connectionString);
+
+  const client = await MongoClient.connect(connectionString);
 
   return client;
-}
+};
 
 export const insertDocument = async (client, collection, document) => {
   const db = client.db();
@@ -14,9 +21,14 @@ export const insertDocument = async (client, collection, document) => {
   const result = await db.collection(collection).insertOne(document);
 
   return result;
-}
+};
 
-export const getAllDocuments = async (client, collection, sort, filter = {}) => {
+export const getAllDocuments = async (
+  client,
+  collection,
+  sort,
+  filter = {}
+) => {
   const db = client.db();
   const documents = await db
     .collection(collection)
@@ -25,4 +37,4 @@ export const getAllDocuments = async (client, collection, sort, filter = {}) => 
     .toArray();
 
   return documents;
-}
+};
