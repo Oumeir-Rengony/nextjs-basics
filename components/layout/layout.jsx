@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
 import MainHeader from "./main-header";
-import classes from "./styles/main-header.module.css";
+import Notification from "../notification/notification";
+import NotificationContext from "../../store/notification-context";
 
 const Layout = ({children}) => {
+
+    const notificationContext = useContext(NotificationContext);
+
+    const activeNotification= notificationContext.notification;
+
     return(
         <>
             <MainHeader />
-            <main>
-                {children}
-            </main>
+            <main>{children}</main>
+            {
+                activeNotification && (
+                    <Notification 
+                        title={activeNotification.title} 
+                        message={activeNotification.message} 
+                        status={activeNotification.status}/>
+                )
+            }
+            
         </>
     )
 };
